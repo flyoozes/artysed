@@ -65,7 +65,7 @@ jobs:
             # Run a new container from a new image
             docker run -d \
             --restart always \
-            -p 80:8080 \
+            -p 80:5150 \
             --name $(echo ${{ github.repository_owner }}) \
             ghcr.io/${{ github.repository }}:latest
 
