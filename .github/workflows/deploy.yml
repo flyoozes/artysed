@@ -33,3 +33,35 @@ jobs:
           file: Dockerfile
           push: true
           tags: ghcr.io/${{ github.repository }}:latest
+
+   deploy:
+    name: Deploy to Digital Ocean Droplet
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@v0.1.3
+        with: 
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          PORT: ${{ secrets.PORT }}
+          scripts: |
+            # Stop running container
+            docker stop ${{ github.repository_owner }}
+
+            # Remove olds container
+            docker rm ${{ github.repository_owner }}
+
+            # Login to Github Container Registry 
+            docker login https://ghrc.io -u ${{ github.repository_owner }} -p ${{ secrets.CR_PAT }}
+
+            # Pull the Docker Image
+            docker pull ghcr.io/${{ github.repository }}:latest
+
+            # Run a new container from a new image
+            docker run -d \
+            --restart always \
+            --env-file .env \
+            -p 8000:8080 \
+            --name $(echo $${{ github.repository }})
