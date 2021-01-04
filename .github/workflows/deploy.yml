@@ -22,7 +22,7 @@ jobs:
         with:
           registry: ghcr.in
           username: ${{ github.repository_owner }}
-          password: ${{ artysed.CP_PAT }}
+          password: ${{ secrets.CP_PAT }}
 
       # Push to GitHub Container Registry
       - name: Push to GitHub Container Registry
