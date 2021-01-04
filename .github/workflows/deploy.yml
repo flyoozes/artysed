@@ -66,5 +66,5 @@ jobs:
             docker run -d \
             --restart always \
             -p 8080:8080 \
-            --name $(echo ${{ github.repository }}) \
-            ${{ github.repository }}:latest
+            --name $(echo ${{ github.repository_owner }}) \
+            ghcr.io/${{ github.repository }}:latest
