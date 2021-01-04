@@ -7,6 +7,7 @@ on:
 
 jobs:
   build:
+    name: Building and pushing to GHCR
     runs-on: ubuntu-latest
     steps:
       # Checkout the Repository
@@ -65,4 +66,5 @@ jobs:
             docker run -d \
             --restart always \
             -p 8080:8080 \
-            --name $(echo ${{ github.repository }})
+            --name $(echo ${{ github.repository }}) \
+            ${{ github.repository }}:latest
