@@ -56,7 +56,7 @@ jobs:
             docker rm ${{ github.repository_owner }}
 
             # Login to Github Container Registry 
-            docker login https://ghrc.io -u ${{ github.repository_owner }} -p ${{ secrets.CR_PAT }}
+            docker login https://ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.CR_PAT }}
 
             # Pull the Docker Image
             docker pull ghcr.io/${{ github.repository }}:latest
