@@ -34,7 +34,7 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository }}:latest
 
-   deploy:
+  deploy:
     name: Deploy to Digital Ocean Droplet
     runs-on: ubuntu-latest
 
