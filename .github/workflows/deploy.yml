@@ -64,6 +64,5 @@ jobs:
             # Run a new container from a new image
             docker run -d \
             --restart always \
-            --env-file .env \
             -p 8080:8080 \
             --name $(echo $${{ github.repository }})
