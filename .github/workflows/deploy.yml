@@ -47,6 +47,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
           PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.SSH_KEY }}
           scripts: |
             # Stop running container
             docker stop ${{ github.repository_owner }}
