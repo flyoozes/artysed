@@ -63,11 +63,13 @@ jobs:
             docker pull ghcr.io/${{ github.repository }}:latest
 
             # Run a new container from a new image
-            docker run -d \
-            --restart always \
-            -p 80:5150 \
-            --name $(echo ${{ github.repository_owner }}) \
-            ghcr.io/${{ github.repository }}:latest
+            # docker run -d \
+            # --restart always \
+            # -p 80:5150 \
+            # --name $(echo ${{ github.repository_owner }}) \
+            # ghcr.io/${{ github.repository }}:latest
+
+            docker-compose up -d
 
             # Remove all dangling images
-            docker image prune -f -a
+            # docker image prune -f -a
