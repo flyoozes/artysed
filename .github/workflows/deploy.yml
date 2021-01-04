@@ -1,0 +1,35 @@
+name: build
+
+on:
+  push: 
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the Repository
+      - name: Checking out the Repository
+        uses: actions/checkout@v2
+
+      # Setting up Docker builder
+      - name: Set up Docker builder
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log into GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.in
+          username: ${{ github.repository_owner }}
+          password: ${{ artysed.CP_PAT }}
+
+      # Push to GitHub Container Registry
+      - name: Push to GitHub Container Registry
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          version: latest
+          file: Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
