@@ -58,8 +58,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSH_KEY }}
-          source: "docker-compose.yml"
-          target: "/tmp"
+          source: "./docker-compose.yml"
+          target: "~/"
+          debug: true
           script: |
             # Stop running container
             docker stop ${{ github.repository_owner }}
