@@ -13,7 +13,7 @@ jobs:
       # Checkout the Repository
       - uses: actions/checkout@v2
       - name: Build image
-        run: docker-compose up
+        run: docker-compose build
 
       # Setting up Docker builder
       - name: Set up Docker builder
