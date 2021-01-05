@@ -13,6 +13,7 @@ jobs:
       # Checkout the Repository
       - name: Checking out the Repository
         uses: actions/checkout@v2
+        run: docker-compose build
 
       # Setting up Docker builder
       - name: Set up Docker builder
@@ -31,55 +32,53 @@ jobs:
         with:
           context: .
           version: latest
-          file: Dockerfile
+          file: docker-compose.yml
           push: true
           tags: ghcr.io/${{ github.repository }}:latest
 
-  deploy:
-    name: Deploy to Digital Ocean Droplet
-    runs-on: ubuntu-latest
-    needs: build
+  # deploy:
+  #   name: Deploy to Digital Ocean Droplet
+  #   runs-on: ubuntu-latest
+  #   needs: build
 
-    steps:
-      # - name: Copy docker-compose.yml via SSH action
-      #   uses: actions/checkout@master
-      #   with:
-      #     host: ${{ secrets.HOST }}
-      #     username: ${{ secrets.USERNAME }}
-      #     key: ${{ secrets.SSH_KEY }}
-      #     port: ${{ secrets.PORT }}
-      #     source: "docker-compose.yml"
-      #     target: "/tmp/"
+  #   steps:
+  #     # - name: Copy docker-compose.yml via SSH action
+  #     #   uses: actions/checkout@master
+  #     #   with:
+  #     #     host: ${{ secrets.HOST }}
+  #     #     username: ${{ secrets.USERNAME }}
+  #     #     key: ${{ secrets.SSH_KEY }}
+  #     #     port: ${{ secrets.PORT }}
+  #     #     source: "docker-compose.yml"
+  #     #     target: "/tmp/"
 
-      - name: Deploy to Digital Ocean droplet via SSH action
-        uses: appleboy/ssh-action@master
-        with: 
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "./docker-compose.yml"
-          target: "~/"
-          debug: true
-          script: |
-            # Stop running container
-            docker stop ${{ github.repository_owner }}
+  #     - name: Deploy to Digital Ocean droplet via SSH action
+  #       uses: appleboy/ssh-action@master
+  #       with: 
+  #         host: ${{ secrets.HOST }}
+  #         username: ${{ secrets.USERNAME }}
+  #         port: ${{ secrets.PORT }}
+  #         key: ${{ secrets.SSH_KEY }}
+  #         debug: true
+  #         script: |
+  #           # Stop running container
+  #           docker stop ${{ github.repository_owner }}
 
-            # Remove olds container
-            docker rm ${{ github.repository_owner }}
+  #           # Remove olds container
+  #           docker rm ${{ github.repository_owner }}
 
-            # Login to Github Container Registry 
-            docker login https://ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.CR_PAT }}
+  #           # Login to Github Container Registry 
+  #           docker login https://ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.CR_PAT }}
 
-            # Pull the Docker Image
-            docker pull ghcr.io/${{ github.repository }}:latest
+  #           # Pull the Docker Image
+  #           docker pull ghcr.io/${{ github.repository }}:latest
 
-            # Run a new container from a new image
-            docker run -d \
-            --restart always \
-            -p 80:5150 \
-            --name $(echo ${{ github.repository_owner }}) \
-            ghcr.io/${{ github.repository }}:latest
+  #           # Run a new container from a new image
+  #           docker run -d \
+  #           --restart always \
+  #           -p 80:5150 \
+  #           --name $(echo ${{ github.repository_owner }}) \
+  #           ghcr.io/${{ github.repository }}:latest
 
-            # Remove all dangling images
-            docker image prune -f -a
+  #           # Remove all dangling images
+  #           docker image prune -f -a
