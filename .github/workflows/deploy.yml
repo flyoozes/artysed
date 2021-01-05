@@ -27,12 +27,14 @@ jobs:
           password: ${{ secrets.CR_PAT }}
 
       # Push to GitHub Container Registry
+      # - name: Push to GitHub Container Registry
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     tags: ghcr.io/${{ github.repository }}:latest
+
       - name: Push to GitHub Container Registry
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: ghcr.io/${{ github.repository }}:latest
-          file: ./docker-compose.yml
+        runs: docker-compose push ghcr.io/${{ github.repository }}:latest
+
 
   # deploy:
   #   name: Deploy to Digital Ocean Droplet
