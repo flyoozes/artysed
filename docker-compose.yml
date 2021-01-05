@@ -1,10 +1,7 @@
 version: '3'
 services: 
   node: 
-    # image: docker pull ghcr.io/${{ github.repository }}:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/flyoozes/artysed:latest
     container_name: nodejs
     networks: 
       - app-network
