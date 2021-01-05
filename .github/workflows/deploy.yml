@@ -33,7 +33,7 @@ jobs:
       #     tags: ghcr.io/${{ github.repository }}:latest
 
       - name: Push to GitHub Container Registry
-        runs: docker-compose push ghcr.io/${{ github.repository }}:latest
+        run: docker-compose push ghcr.io/${{ github.repository }}:latest
 
 
   # deploy:
