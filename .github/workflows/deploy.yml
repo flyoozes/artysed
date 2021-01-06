@@ -42,7 +42,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Copy docker-compose.yml via SSH action
         uses: appleboy/scp-action@master
         with:
