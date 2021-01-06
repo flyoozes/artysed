@@ -50,7 +50,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
-          source: "docker-compose.yml"
+          source: "docker-compose.yml,data/nginx/app.conf"
           target: "."
 
       - name: Deploy to Digital Ocean droplet via SSH action
@@ -62,14 +62,11 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           debug: true
           script: |
-            # Stop running container
-            docker-compose stop 
-
-            # Remove olds container
-            docker container rm $(docker container ls –aq)
-
             # Login to Github Container Registry 
             docker login https://ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.CR_PAT }}
+
+            # Stop running container
+            docker-compose down --remove-orphans
             
             # Pull the Docker Image
             docker pull ghcr.io/${{ github.repository }}:latest
@@ -78,4 +75,4 @@ jobs:
             docker-compose up -d
             
             # Remove all dangling images
-            docker image prune -f -a
+            # docker image prune -f -a
