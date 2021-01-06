@@ -63,10 +63,10 @@ jobs:
           debug: true
           script: |
             # Stop running container
-            docker stop ${{ github.repository_owner }}
+            docker-compose stop 
 
             # Remove olds container
-            docker rm ${{ github.repository_owner }}
+            docker container rm $(docker container ls –aq)
 
             # Login to Github Container Registry 
             docker login https://ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.CR_PAT }}

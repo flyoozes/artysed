@@ -9,6 +9,6 @@ COPY . .
 RUN npm i
 RUN npm run build
 
-CMD [ "serve", "dist", "-s", "-l", "5150" ]
+CMD [ "serve", "dist", "-s", "-l", "8080" ]
 
-EXPOSE 5150
+EXPOSE 8080

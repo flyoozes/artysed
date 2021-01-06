@@ -1,6 +1,6 @@
 version: '3'
 services: 
-  node: 
+  nodejs: 
     image: ghcr.io/flyoozes/artysed:latest
     container_name: nodejs
     networks: 
@@ -8,6 +8,7 @@ services:
 
   nginx:
     image: nginx:stable-alpine
+    container_name: nginx
     ports: 
       - "80:80"
       - "443:443"
@@ -19,7 +20,7 @@ services:
       # - ./data/certbot/conf:/etc/letsencrypt
       # - ./data/certbot/www:/var/www/certbot
     depends_on: 
-      - node
+      - nodejs
     networks: 
       - app-network
 
