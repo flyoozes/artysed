@@ -73,6 +73,3 @@ jobs:
 
             # Run a new container from a new image
             docker-compose up -d
-            
-            # Remove all dangling images
-            # docker image prune -f -a
