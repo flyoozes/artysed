@@ -74,3 +74,6 @@ jobs:
 
             # Run a new container from a new image
             docker-compose up -d
+
+            # Remove docker-compose.yml
+            rm -R docker-compose.yml

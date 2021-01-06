@@ -1,6 +1,6 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <iframe src="https://giphy.com/embed/IwTWTsUzmIicM" width="480" height="359" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p></p>
+  <HelloWorld/>
 </template>
 
 <script>
