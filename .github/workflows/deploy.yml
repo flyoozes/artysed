@@ -52,6 +52,7 @@ jobs:
           port: ${{ secrets.PORT }}
           source: "docker-compose.yml,data/nginx/app.conf"
           target: "."
+          overwrite: true
 
       - name: Deploy to Digital Ocean droplet via SSH action
         uses: appleboy/ssh-action@master
