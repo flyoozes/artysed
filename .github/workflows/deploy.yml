@@ -1,0 +1,77 @@
+name: build
+
+on:
+  push: 
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Building and pushing to GHCR
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the Repository
+      - name: Checking out the Repository
+        uses: actions/checkout@v2
+
+      # Setting up Docker builder
+      - name: Set up Docker builder
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log into GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.CR_PAT }}
+
+      # Push to GitHub Container Registry
+      - name: Push to GitHub Container Registry
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          version: latest
+          file: Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
+
+  deploy:
+    name: Deploy to Digital Ocean Droplet
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Copy docker-compose.yml via SSH action
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          source: "docker-compose.yml,data/nginx/app.conf"
+          target: "."
+          overwrite: true
+
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@master
+        with: 
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          debug: true
+          script: |
+            # Login to Github Container Registry 
+            docker login https://ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.CR_PAT }}
+
+            # Stop running container
+            docker-compose down --remove-orphans
+            
+            # Pull the Docker Image
+            docker pull ghcr.io/${{ github.repository }}:latest
+
+            # Run a new container from a new image
+            docker-compose up -d
+
